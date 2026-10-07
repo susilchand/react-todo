@@ -12,7 +12,7 @@ deleteTodo: (id:number)=>void;
 const Todo = ({item,completeTodo,deleteTodo}:Todos) => {
   return (
     <>
-        <div key={item.id} className="flex items-center justify-between p-4 mt-2 rounded-xl border"
+        <div key={item.id} className="flex items-center justify-between p-4 mt-2 rounded-xl border bg-fuchsia-950"
                                 >
                                     <div className="flex items-center gap-2 ">
                                         <p className={`${item.completed ? "line-through": ""}`}>
