@@ -1,34 +1,27 @@
 import { Plus } from "lucide-react";
 import Todo from "./Todo";
+import { useTodoStore } from "../store/todoStore";
 import { useState } from "react";
-type Todo = {
-  id: number;
-  text: string;
-  completed: boolean;
-};
-const TodoApp = () => {
-  const [todo, setTodo] = useState<string>("");
 
-  const [todos, setTodos] = useState<Todo[]>([]);
-  const addTodo = () => {
-    if (!todo.trim()) return;
-    const newTodo = { id: Date.now(), text: todo, completed: false };
-    setTodos((prevTodos) => [...prevTodos, newTodo]);
-    setTodo("");
-  };
-  const deleteTodo = (id: number) => {
-    setTodos(todos.filter((item) => item.id !== id));
-  };
-  const completeTodo = (id: number) => {
-    setTodos(
-      todos.map((item) =>
-        item.id === id ? { ...item, completed: !item.completed } : item,
-      ),
-    );
+const TodoApp = () => {
+  const [todo, setTodo] = useState("");
+  const { todos, addTodo, markedTodo, deleteTodo } = useTodoStore(
+    (state) => state,
+  );
+
+  const addTodos = () => {
+    if (todo.trim()) {
+      addTodo(todo);
+      setTodo("");
+    } else {
+      alert("please fill data first");
+    }
   };
   const handleEnterKey = (e: React.KeyboardEvent<HTMLInputElement>) => {
+    e.preventDefault();
+
     if (e.key === "Enter") {
-      addTodo();
+      addTodos();
     }
   };
   return (
@@ -51,7 +44,7 @@ const TodoApp = () => {
                 onKeyDown={handleEnterKey}
               />
               <button
-                onClick={addTodo}
+                onClick={addTodos}
                 className="flex items-center gap-1 bg-fuchsia-950 text-white px-4 py-3 rounded-xl hover:bg-purple-800"
               >
                 <Plus size={20} />
@@ -74,7 +67,7 @@ const TodoApp = () => {
                   <Todo
                     key={item.id}
                     item={item}
-                    completeTodo={completeTodo}
+                    completeTodo={markedTodo}
                     deleteTodo={deleteTodo}
                   />
                 );
